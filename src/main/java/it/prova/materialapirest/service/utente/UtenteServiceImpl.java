@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.prova.materialapirest.model.Ruolo;
 import it.prova.materialapirest.model.StatoUtente;
 import it.prova.materialapirest.model.Utente;
 import it.prova.materialapirest.repository.utente.UtenteRepository;
@@ -18,7 +19,7 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Autowired
 	private UtenteRepository repository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -58,6 +59,14 @@ public class UtenteServiceImpl implements UtenteService {
 		utenteInstance.setDataNascita(new Date());
 		repository.save(utenteInstance);
 	}
+	
+	@Transactional
+	public void registra(Utente utenteInstance) {
+		utenteInstance.setStato(StatoUtente.CREATO);
+		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
+		utenteInstance.getRuoli().add(new Ruolo("Classic User",Ruolo.ROLE_CLASSIC_USER));
+		repository.save(utenteInstance);
+	}
 
 	@Transactional
 	public void rimuovi(Long idToRemove) {
@@ -65,7 +74,7 @@ public class UtenteServiceImpl implements UtenteService {
 		repository.deleteById(idToRemove);
 	}
 
-	//DA IMPLEMENTARE
+	// DA IMPLEMENTARE
 	@Transactional
 	public List<Utente> findByExample(Utente example) {
 		return listAllUtenti();
@@ -93,6 +102,27 @@ public class UtenteServiceImpl implements UtenteService {
 			utenteInstance.setStato(StatoUtente.DISABILITATO);
 		else if (utenteInstance.getStato().equals(StatoUtente.DISABILITATO))
 			utenteInstance.setStato(StatoUtente.ATTIVO);
+
+	}
+
+	@Transactional
+	public void disabilityUserAbilitation(Long utenteInstanceId) {
+		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);
+		if (utenteInstance == null)
+			throw new RuntimeException("Elemento non trovato.");
+
+		if (utenteInstance.getStato() == null || utenteInstance.getStato().equals(StatoUtente.CREATO))
+			utenteInstance.setStato(StatoUtente.DISABILITATO);
+		else if (utenteInstance.getStato().equals(StatoUtente.ATTIVO))
+			utenteInstance.setStato(StatoUtente.DISABILITATO);
+		else if (utenteInstance.getStato().equals(StatoUtente.DISABILITATO))
+			utenteInstance.setStato(StatoUtente.DISABILITATO);
+	}
+
+	@Transactional
+	public String mostraRuoli(Utente utenteInput) {
+		Utente utenteInstance = caricaSingoloUtente(utenteInput.getId());
+		return utenteInstance.getRuoli().toString();
 
 	}
 

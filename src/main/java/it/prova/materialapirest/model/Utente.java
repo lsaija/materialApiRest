@@ -92,6 +92,24 @@ public class Utente {
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}
+	
+	
+
+	public Utente(Long id, String username, String nome, String cognome) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+	}
+	public Utente(Long id, String username, String nome, String cognome,Date dataNascita) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+	    this.dataNascita=dataNascita;
+	}
 
 	public Long getId() {
 		return id;

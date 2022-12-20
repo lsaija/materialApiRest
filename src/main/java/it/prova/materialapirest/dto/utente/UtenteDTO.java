@@ -2,6 +2,8 @@ package it.prova.materialapirest.dto.utente;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
@@ -146,6 +148,18 @@ public class UtenteDTO {
 					.toArray(new Long[] {});
 
 		return result;
+	}
+	
+	public static List<UtenteDTO> createUtenteDTOListFromModelList(List<Utente> modelListInput) {
+		return modelListInput.stream().map(utenteEntity -> {
+			return UtenteDTO.buildUtenteDTOFromModel(utenteEntity);
+		}).collect(Collectors.toList());
+	}
+	
+	public static Set<UtenteDTO> createUtenteDTOSetFromModelSet(Set<Utente> modelListInput) {
+		return modelListInput.stream().map(utenteEntity -> {
+			return UtenteDTO.buildUtenteDTOFromModel(utenteEntity);
+		}).collect(Collectors.toSet());
 	}
 	
 	

@@ -27,5 +27,11 @@ public interface UtenteService {
 	public void changeUserAbilitation(Long utenteInstanceId);
 
 	public Utente findByUsername(String username);
+	
+	public void disabilityUserAbilitation(Long utenteInstanceId);
+	
+	public void registra(Utente utenteinput);
+	
+	public String mostraRuoli(Utente utenteInput);
 
 }
